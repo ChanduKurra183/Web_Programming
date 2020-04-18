@@ -6,6 +6,12 @@
         </title>
     </head>
     <body style = "background-color: rgb(43, 174, 226);";>
+
+        <div class="container">
+            {% if message %}
+            <p>{{ message }}</p>
+            {% endif %}
+        </div>
         <form align = "center" Style = "padding-top:250px"; method = "POST">
             username: <input type = "text" name = "username" oninvalid = "alert('Please enter your name');" required/> <br/> <br/>
             password: <input type = "password" name = "password" oninvalid = "alert('Please enter your password to login');" required/><br/> <br/>
