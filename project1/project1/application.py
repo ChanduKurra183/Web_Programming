@@ -34,9 +34,16 @@ def register():
         username = request.form["username"]
         password = request.form["password"]
         timeStamp = datetime.datetime.now()
-        obj = Form(username, password, timeStamp)
+        form = Form(username=username, password=password, timeStamp=timeStamp)
         str = username + " " + "entered details"
-        return render_template("registration.html", message = str)
+
+        try:
+            session.add(form)
+            session.commit()
+            # print("committed")
+            return render_template("success.html", message = str)
+        except:
+            return render_template("error.html")
     else:
         return render_template("registration.html")
         
