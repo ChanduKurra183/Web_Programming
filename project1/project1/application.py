@@ -1,7 +1,7 @@
 import os
 import datetime
 
-from flask import Flask, session, request, render_template
+from flask import Flask, session, request, render_template, redirect, url_for, escape
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -14,13 +14,21 @@ if not os.getenv("DATABASE_URL"):
     raise RuntimeError("DATABASE_URL is not set")
 
 # Configure session to use filesystem
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
+# app.config["SESSION_PERMANENT"] = False
+# app.config["SESSION_TYPE"] = "filesystem"
+# Session(app)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
 
 # Set up database
-engine = create_engine(os.getenv("DATABASE_URL"))
-db = scoped_session(sessionmaker(bind=engine))
+# engine = create_engine(os.getenv("DATABASE_URL"))
+# db = scoped_session(sessionmaker(bind=engine))
+
+db.init_app(app)
+with app.app_context():
+    db.create_all()
 
 
 @app.route("/")
@@ -34,16 +42,18 @@ def register():
         username = request.form["username"]
         password = request.form["password"]
         timeStamp = datetime.datetime.now()
-        form = Form(username=username, password=password, timeStamp=timeStamp)
+        obj = User(username=username, password=password, timeStamp=timeStamp)
         str = username + " " + "entered details"
 
         try:
-            session.add(form)
-            session.commit()
+            db.session.add(obj)
+            db.session.commit()
             # print("committed")
             return render_template("success.html", message = str)
         except:
             return render_template("error.html")
     else:
         return render_template("registration.html")
+
+        
         
