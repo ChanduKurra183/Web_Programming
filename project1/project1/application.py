@@ -55,5 +55,7 @@ def register():
     else:
         return render_template("registration.html")
 
-        
-        
+@app.route("/admin")
+def details():
+    data = User.query.all()
+    return render_template("admin.html", data = data)
