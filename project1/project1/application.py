@@ -8,7 +8,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from models import *
 
 app = Flask(__name__, template_folder = "template") 
-
+app.secret_key = 'chandu456789'
 # Check for environment variable
 if not os.getenv("DATABASE_URL"):
     raise RuntimeError("DATABASE_URL is not set")
@@ -35,8 +35,9 @@ with app.app_context():
 def index():
     return "Project 1: TODO"
 
+@app.route("/register/<int:args>", methods = ["POST","GET"])
 @app.route("/register",methods = ["GET", "POST"])
-def register():
+def register(args = None):
     str = ""
     if request.method == "POST":
         username = request.form["username"]
@@ -49,11 +50,24 @@ def register():
             db.session.add(obj)
             db.session.commit()
             # print("committed")
-            return render_template("success.html", message = str)
+            return render_template("registration.html", message ="Sucessfully registered")
         except:
-            return render_template("error.html")
+            return render_template("registration.html", message ="User already exist")
     else:
-        return render_template("registration.html")
+        if args == 1:
+            message = "Session Expired"
+        elif args == 2:
+            message = "logged Out"
+        elif args == 3:
+            message="user account dosent exists please register."
+        elif args == 4:
+            message = "Please Enter Valid Credentials"
+        elif args == 5:
+            message = "Please Login..!"
+        
+        else:
+            message = ""
+        return render_template("registration.html", message = message)
 
 @app.route("/admin")
 def details():
@@ -67,20 +81,41 @@ def details():
 @app.route('/auth',methods=['POST', 'GET'])
 def auth():
     if request.method == 'POST':
+        print("entered")
         username=request.form.get('username')
         password=request.form.get('password')
-        thisuser= db.query(User).get(username)
-        try:
+        thisuser = User.query.filter_by(username=username).first()
+
+        if (thisuser is not None):
             if(username==thisuser.username) and (password==thisuser.password):
                 session['username'] = username
+                print("session started")
                 
-                return render_template("login.html", username = username)
+                return redirect(url_for('home'))
             else:
-                return render_template('registration.html',message="Please Enter Valid Password")
-        except:
-            return render_template('registration.html',message="Please Enter Valid Credentials")   
+               print("else 1")
+               return redirect(url_for('register',args = 4))
+        else:
+            print("else 2")
+            return redirect(url_for('register',args = 3))
+    else:
+        return redirect(url_for('register',args = 5))
+           
 
 @app.route("/logout",methods = ["GET"])
 def logout():
     session.clear()
-    return redirect("/register")
+    return redirect(url_for("register", args = 2))
+
+@app.route('/home')
+def home():
+    try:
+        username =session['username']
+        return render_template('login.html')
+    except:
+        return redirect(url_for('register',args = 1))
+
+# @app.route("/login")
+# def login():
+#     username =session['username'].username
+#     return render_template('login.html',username=username)
