@@ -8,7 +8,7 @@ class User(db.Model):
     timeStamp     = db.Column(db.DateTime)
 
 
-    # def _init_(self, username,password,timeStamp):
-    #     self.username   = username
-    #     self.password   = password
-    #     self.timeStamp  = timeStamp
+    def _init_(self, username,password,timeStamp):
+        self.username   = username
+        self.password   = password
+        self.timeStamp  = timeStamp

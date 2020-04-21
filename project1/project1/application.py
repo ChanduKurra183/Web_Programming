@@ -59,3 +59,28 @@ def register():
 def details():
     data = User.query.all()
     return render_template("admin.html", data = data)
+
+# @app.route("/auth", methods = ["GET", "POST"])
+# def auth():
+#     request.method == "POST" 
+# 
+@app.route('/auth',methods=['POST', 'GET'])
+def auth():
+    if request.method == 'POST':
+        username=request.form.get('username')
+        password=request.form.get('password')
+        thisuser= db.query(User).get(username)
+        try:
+            if(username==thisuser.username) and (password==thisuser.password):
+                session['username'] = username
+                
+                return render_template("login.html", username = username)
+            else:
+                return render_template('registration.html',message="Please Enter Valid Password")
+        except:
+            return render_template('registration.html',message="Please Enter Valid Credentials")   
+
+@app.route("/logout",methods = ["GET"])
+def logout():
+    session.clear()
+    return redirect("/register")
