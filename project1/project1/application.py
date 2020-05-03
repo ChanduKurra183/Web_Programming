@@ -42,8 +42,9 @@ def register(args = None):
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        email = request.form["email"]
         timeStamp = datetime.datetime.now()
-        obj = User(username=username, password=password, timeStamp=timeStamp)
+        obj = User(username=username, password=password,email = email, timeStamp=timeStamp)
         str = username + " " + "entered details"
 
         try:
@@ -84,6 +85,7 @@ def auth():
         print("entered")
         username=request.form.get('username')
         password=request.form.get('password')
+        email=request.form.get('email')
         thisuser = User.query.filter_by(username=username).first()
 
         if (thisuser is not None):
