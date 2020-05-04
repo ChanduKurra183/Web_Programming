@@ -1,7 +1,8 @@
 function validateForm() {
-    var x = document.forms["register"]["username"].value;
-    var password = document.forms["register"]["password"].value;
-    var email = document.forms["register"]["email"].value;
+    var x = document.forms["form"]["username"].value;
+    var password = document.forms["form"]["password"].value;
+    var email = document.forms["form"]["email"].value;
+    console.log(x)
   
     var fun1 = validateUser(x);
     var fun2 = validatePassword(password);
@@ -10,14 +11,17 @@ function validateForm() {
     if (fun1 == true && fun2 == true && fun3 == true) {
       return true;
     }
-    return false;
+    else {
+      return false;
+    }
+    
     
   }
   
   function validateUser(x) {
-    if (x == "") {
+    if (x.length() < 1) {
       document.querySelector(".usermessage").innerHTML = "Enter username.";
-      // alert("Name must be filled out");
+      alert("Name must be filled out");
       return false;
     }
     return true;

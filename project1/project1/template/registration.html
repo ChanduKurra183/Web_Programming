@@ -4,6 +4,118 @@
         <title>
             Registration form
         </title>
+        <script type="text/javascript" >
+            function validateForm() {
+                var x = document.forms["form"]["username"].value;
+                var password = document.forms["form"]["password"].value;
+                var email = document.forms["form"]["email"].value;
+                console.log(x)
+            
+                var fun1 = validateUser(x);
+                var fun2 = validatePassword(password);
+                var fun3 = validateEmail(email);
+            
+                if (fun1 == true && fun2 == true && fun3 == true) {
+                return true;
+                }
+                else {
+                return false;
+                }
+                
+                
+            }
+            
+            function validateUser(x) {
+                if (x.length < 1) {
+                document.querySelector(".usermessage").innerHTML = "Enter username.";
+                alert("Name must be filled out");
+                return false;
+                }
+                return true;
+            }
+            
+            function validatePassword(password) {
+                var password = password;
+                var cap = 0;
+                var num = 0;
+                var small = 0;
+                var special = 0;
+            
+                if (password == "") {
+                document.querySelector(".passmessage").innerHTML = "Enter password.";
+                // alert("password must be filled out");
+                return false;
+                }
+            
+                if (password.length < 6) {
+                document.querySelector(".passmessage").innerHTML =
+                    "Password should alteast contain 6 characters.";
+                return false;
+                }
+            
+                for (let i = 0; i < password.length; i++) {
+                // console.log(password)
+                var t = password.charCodeAt(i); //kR1shna
+                // console.log(i)
+                if (t >= 49 && t <= 57) {
+                    num++;
+                }
+                if (t >= 65 && t <= 90) {
+                    cap++;
+                }
+                if (t >= 97 && t <= 122) {
+                    small++;
+                }
+                if (t == 42 || t == 64 || t == 46 || t == 95) {
+                    special++;
+                }
+                }
+            
+                if (num >= 1 && cap >= 1 && small >= 1 && special >= 1) {
+                return true;
+                } else {
+                var msg =
+                    "Password should contain atleast one Capital Letter[A-Z], small letter[a-z], numbers[0-9],special characters.";
+                
+                document.querySelector(".passmessage").innerHTML = msg;
+                // alert("reached")
+            
+                return false;
+                }
+            }
+            
+            function validateEmail(email) {
+                var e = email;
+                var parts = e.split("@"); 
+                // To seperate
+            
+                var message = "Invalid Email";
+                var atSymbol = e.indexOf("@");
+            
+                // check for @
+                if (atSymbol < 1) {
+                document.querySelector(".emailmessage").innerHTML = message;
+                return false;
+                }
+                var dot = atSymbol + parts[1].indexOf(".");
+                if (dot <= atSymbol + 2) {
+                document.querySelector(".emailmessage").innerHTML = message;
+                return false;
+                }
+            
+                // check that the dot is not at the end
+                if (dot === e.length - 1) {
+                //g
+                document.querySelector(".emailmessage").innerHTML = message;
+                return false;
+                }
+            
+                return true;
+            }
+
+  
+
+        </script>
     </head>
     <body style = "background-color: rgb(43, 174, 226);";>
 
@@ -14,13 +126,16 @@
         </div>
         <div" class = "container">
 
-            <form align = "center" Style = "padding-top:250px"; method = "POST">
+            <form align = "center" Style = "padding-top:250px"; method = "POST" name = "form">
                 <label> username:</label> 
-                <input type = "text" name = "username"  style="color:red;" class="usermessage"/> <br/> <br/>
+                <input type = "text" name = "username"  style="color:red;" required/> <br/> <br/>
+                <p style="color:red;" class="usermessage"></p><br />
                 <label>password:</label> 
-                <input type = "password" name = "password"  style="color:red;" class="passmessage"/><br/> <br/>
+                <input type = "password" name = "password"  style="color:red;" required/><br/> <br/>
+                <p style="color:red;" class="passmessage"></p><br />
                 <label>  Email:</label> &nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="email" id="mail" name="email" class="emailmessage"/><br /> <br />
+                <input type="email" id="mail" name="email" required/><br /> <br />
+                <p style="color:red;" class="emailmessage"></p><br />
                 <button type = "submit"  formmethod="POST" onclick="return validateForm()"> Register </button>
                 <button type = "submit" formaction="{{ url_for('auth') }} " formmethod="POST" onclick="return validateForm()"> Login </button>
             </form>
