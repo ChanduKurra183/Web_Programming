@@ -128,15 +128,16 @@
 
             <form align = "center" Style = "padding-top:250px"; method = "POST" name = "form">
                 <label> username:</label> 
-                <input type = "text" name = "username"  style="color:red;" required/> <br/> <br/>
+                <input type = "text" name = "username"  style="color:red;" required/> <br/>
                 <p style="color:red;" class="usermessage"></p><br />
                 <label>password:</label> 
-                <input type = "password" name = "password"  style="color:red;" required/><br/> <br/>
+                <input type = "password" name = "password"  style="color:red;" required/><br/>
                 <p style="color:red;" class="passmessage"></p><br />
                 <label>  Email:</label> &nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="email" id="mail" name="email" required/><br /> <br />
-                <p style="color:red;" class="emailmessage"></p><br />
-                <button type = "submit"  formmethod="POST" onclick="return validateForm()"> Register </button>
+                <input type="email" id="mail" name="email" required/><br />
+                <p style="color:red;" class="emailmessage"></p><br /> <br/>
+                <button type = "submit"  formmethod="POST" onclick="return validateForm()"> Register </button> 
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
                 <button type = "submit" formaction="{{ url_for('auth') }} " formmethod="POST" onclick="return validateForm()"> Login </button>
             </form>
         </div>
